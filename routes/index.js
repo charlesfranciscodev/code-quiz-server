@@ -56,23 +56,17 @@ router.post("/login", function(req, res, next) {
 // POST /register
 router.post("/register", function(req, res, next) {
   var body = req.body;
-  if (body.email && body.name && body.favoriteBook && body.password && body.confirmPassword) {
-    // confirm that user typed same password twice
-    if (body.password !== body.confirmPassword) {
-      var err = new Error("Passwords do not match.");
-      err.status = 400;
-      return next(err);
-    }
-
+  if (body.email && body.password) {
     // create object with form input
     var userData = {
       email: body.email,
-      name: body.name,
-      favoriteBook: body.favoriteBook,
       password: body.password
     };
+    if (body.firstName) userData.firstName = body.firstName;
+    if (body.lastName) userData.lastName = body.lastName;
+    if (body.avatarUrl) userData.avatarUrl = body.avatarUrl;
 
-    // use schema's `create` method to insert document into Mongo
+    // insert document into Mongo
     User.create(userData, function (error, user) {
       if (error) {
         return next(error);
@@ -82,7 +76,7 @@ router.post("/register", function(req, res, next) {
       }
     });
   } else {
-    var error = new Error("All fields required.");
+    var error = new Error("Missing required fields");
     error.status = 400;
     return next(error);
   }

@@ -7,6 +7,10 @@ var UserSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  password: {
+    type: String,
+    required: true
+  },
   firstName: {
     type: String,
     required: false,
@@ -21,10 +25,6 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: false,
     trim: true
-  },
-  password: {
-    type: String,
-    required: true
   }
 });
 
