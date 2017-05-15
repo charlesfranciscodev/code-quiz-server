@@ -3,6 +3,56 @@ var router = express.Router();
 var User = require("../models/user");
 var mid = require("../middleware");
 
+// POST /login
+router.post("/login", function(req, res, next) {
+  if (req.body.email && req.body.password) {
+    User.authenticate(req.body.email, req.body.password, function (error, user) {
+      if (error || !user) {
+        var err = new Error("Wrong email or password.");
+        err.status = 401;
+        return next(err);
+      } else {
+        req.session.userId = user._id;
+        return res.json(user._id);
+      }
+    });
+  } else {
+    var err = new Error("Email and password are required.");
+    err.status = 401;
+    return next(err);
+  }
+});
+
+// POST /register
+router.post("/register", function(req, res, next) {
+  var body = req.body;
+  if (body.email && body.password && body.username) {
+    // create object with form input
+    var userData = {
+      email: body.email,
+      password: body.password,
+      username: body.username
+    };
+    if (body.firstName) userData.firstName = body.firstName;
+    if (body.lastName) userData.lastName = body.lastName;
+    if (body.avatarUrl) userData.avatarUrl = body.avatarUrl;
+
+    // insert document into Mongo
+    User.create(userData, function (error, user) {
+      if (error) {
+        return next(error);
+      } else {
+        req.session.userId = user._id;
+        return res.json(user._id);
+      }
+    });
+  } else {
+    var error = new Error("Missing required fields");
+    error.status = 400;
+    return next(error);
+  }
+});
+
 // GET /profile
 router.get("/profile", mid.requiresLogin, function(req, res, next) {
   User.findById(req.session.userId).exec(function (err, user) {
@@ -11,6 +61,7 @@ router.get("/profile", mid.requiresLogin, function(req, res, next) {
     } else {
       return res.json({
         email: user.email,
+        username: user.username,
         firstName: user.firstName,
         lastName: user.lastName,
         avatarUrl: user.avatarUrl
@@ -30,55 +81,6 @@ router.get("/logout", function(req, res, next) {
         return;
       }
     });
-  }
-});
-
-// POST /login
-router.post("/login", function(req, res, next) {
-  if (req.body.email && req.body.password) {
-    User.authenticate(req.body.email, req.body.password, function (error, user) {
-      if (error || !user) {
-        var err = new Error("Wrong email or password.");
-        err.status = 401;
-        return next(err);
-      } else {
-        req.session.userId = user._id;
-        return res.redirect("/profile");
-      }
-    });
-  } else {
-    var err = new Error("Email and password are required.");
-    err.status = 401;
-    return next(err);
-  }
-});
-
-// POST /register
-router.post("/register", function(req, res, next) {
-  var body = req.body;
-  if (body.email && body.password) {
-    // create object with form input
-    var userData = {
-      email: body.email,
-      password: body.password
-    };
-    if (body.firstName) userData.firstName = body.firstName;
-    if (body.lastName) userData.lastName = body.lastName;
-    if (body.avatarUrl) userData.avatarUrl = body.avatarUrl;
-
-    // insert document into Mongo
-    User.create(userData, function (error, user) {
-      if (error) {
-        return next(error);
-      } else {
-        req.session.userId = user._id;
-        return res.redirect("/profile");
-      }
-    });
-  } else {
-    var error = new Error("Missing required fields");
-    error.status = 400;
-    return next(error);
   }
 });
 
