@@ -19,10 +19,16 @@ Validate a user's credentials.
 
 `200 OK` Valid credentials:
 
-| parameter   | type     | description                |
-| :---:       | :---:    | :---:                      |
-| `_id`       | _string_ | Unique user identifier     |
-| `username`  | _string_ | Unique user nickname       |
+```javascript
+{
+  "message": "Login successful.",
+  "user": {
+    id: _number_,
+    email: _string_,
+    username: _string_
+  }
+}
+```
 
 `401 Unauthorized` Invalid credentials.
 
@@ -47,11 +53,20 @@ Register a new user.
 
 `200 OK` Valid credentials:
 
-| parameter   | type     | description                |
-| :---:       | :---:    | :---:                      |
-| `_id`       | _string_ | Unique user identifier     |
-| `username`  | _string_ | Unique user nickname       |
-
+```javascript
+{
+  "message": "User successfully created.",
+  "user": {
+    id: _number_,
+    email: _string_,
+    username: _string_,
+    firstName: _string_,
+    lastName: _string_,
+    avatarUrl: _string_,
+    createdAt: _date_
+  }
+}
+```
 `400 Bad Request` Missing required fields.
 
 ---
@@ -84,6 +99,16 @@ No parameters
 
 Log out a user.
 
+**Response**
+
+`200 OK` Logout successful:
+
+```javascript
+{
+  "message": "Logout successful."
+}
+```
+
 ---
 
 ## TODO
@@ -109,4 +134,13 @@ Log out a user.
 | CREATE | POST        | INSERT  |
 | READ   | GET         | FIND    |
 | UPDATE | PUT         | UPDATE  |
-| DELETE | DELETE      | DELETE  |
+| DELETE | DELETE      | REMOVE  |
+
+
+## Test User
+```javascript
+{
+  "email": "charlantfr@gmail.com",
+  "password": "Soshag29"
+}
+```

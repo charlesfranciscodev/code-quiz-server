@@ -1,25 +1,14 @@
 {
   "env": {
-    "node": true
+    "node": true,
+    "es6": true
   },
   "extends": "eslint:recommended",
   "rules": {
-    "indent": [
-      "warn",
-      2
-    ],
-    "linebreak-style": [
-      "warn",
-      "unix"
-    ],
-    "quotes": [
-      "warn",
-      "double"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
+    "indent": ["warn", 2],
+    "linebreak-style": ["warn", "unix"],
+    "quotes": ["warn", "double"],
+    "semi": ["error", "always"],
     "no-console": 0
   }
 }

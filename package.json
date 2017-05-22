@@ -1,20 +1,27 @@
 {
   "name": "code-quiz-server",
   "version": "1.0.0",
-  "description": "Code Quiz Server",
+  "description": "Code Quiz API",
   "author": "Charles-Antoine Francisco",
   "private": true,
   "scripts": {
-    "start": "node ./app"
+    "start": "set NODE_ENV=dev && node app.js",
+    "test": "mocha --timeout 10000"
   },
   "dependencies": {
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
+    "config": "^1.26.1",
     "connect-mongo": "^1.3.2",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
     "mongoose": "^4.9.8",
     "morgan": "^1.8.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.4.1"
+  }
 }

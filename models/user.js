@@ -1,6 +1,6 @@
-var mongoose = require("mongoose");
-var bcrypt = require("bcrypt");
-var UserSchema = new mongoose.Schema({
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
@@ -31,6 +31,11 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: false,
     trim: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    required: true,
   }
 });
 
@@ -40,7 +45,7 @@ UserSchema.statics.authenticate = function(email, password, callback) {
     if (err) {
       return callback(err);
     } else if (!user) {
-      var error = new Error("User not found.");
+      let error = new Error("User not found.");
       error.status = 401;
       return callback(error);
     }
@@ -54,16 +59,16 @@ UserSchema.statics.authenticate = function(email, password, callback) {
   });
 };
 
-// hash password before saving to database
 UserSchema.pre("save", function(next) {
-  var user = this;
-  bcrypt.hash(user.password, 10, function(err, hash) {
-    if (err) {
+  const user = this;
+  // hash password before saving to database
+  bcrypt.hash(this.password, 10, (err, hash) => {
+    if (err)
       return next(err);
-    }
     user.password = hash;
     next();
   });
 });
-var User = mongoose.model("User", UserSchema);
+
+let User = mongoose.model('User', UserSchema);
 module.exports = User;
