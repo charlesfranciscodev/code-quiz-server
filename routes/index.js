@@ -3,15 +3,13 @@ const router = express.Router();
 const User = require("../models/user");
 const mid = require("../middleware");
 
-function userResponseObject(user) {
+function userResponse(user) {
   return {
-    id: user._id,
     email: user.email,
     username: user.username,
     firstName: user.firstName,
     lastName: user.lastName,
-    avatarUrl: user.avatarUrl,
-    createdAt: user.createdAt
+    avatarUrl: user.avatarUrl
   };
 }
 
@@ -67,7 +65,15 @@ router.post("/register", (req, res, next) => {
         req.session.userId = user._id;
         return res.json({
           "message": "User sucessfully created.",
-          "user": userResponseObject(user)
+          "user": {
+            id: user._id,
+            email: user.email,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatarUrl: user.avatarUrl,
+            createdAt: user.createdAt
+          }
         });
       }
     });
@@ -85,15 +91,34 @@ router.get("/profile", mid.requiresLogin, (req, res, next) => {
       return next(err);
     } else {
       return res.json({
-        "user": {
-          email: user.email,
-          username: user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          avatarUrl: user.avatarUrl
-        }
+        "user": userResponse(user)
       });
     }
+  });
+});
+
+// PUT /profile
+router.put("/profile", mid.requiresLogin, (req, res, next) => {
+  User.findById(req.session.userId).exec((err, user) => {
+    if (err) return next(err);
+    Object.assign(user, req.body).save((err, user) => {
+      if (err) return next(err);
+      return res.json({
+        "message": "User sucessfully updated.",
+        "user": userResponse(user)
+      });
+    });
+  });
+});
+
+// DELETE /profile
+router.delete("/profile", mid.requiresLogin, (req, res, next) => {
+  User.remove(req.session.userId).exec((err, result) => {
+    if (err) return next(err);
+    return res.json({
+      "message": "User sucessfully deleted.",
+      result
+    });
   });
 });
 

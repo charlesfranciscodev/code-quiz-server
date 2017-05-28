@@ -98,6 +98,63 @@ No parameters
 
 ---
 
+#### PUT `/profile`
+
+Register a new user.
+
+**Request**
+```javascript
+{
+  email: _string_,
+  password: _string_,
+  username: _string_,
+  firstName: _string_,
+  lastName: _string_,
+  avatarUrl: _string_
+}
+```
+
+**Response**
+
+`200 OK`:
+
+```javascript
+{
+  "message": "User sucessfully updated.",
+  "user": {
+    email: _string_,
+    username: _string_,
+    firstName: _string_,
+    lastName: _string_,
+    avatarUrl: _string_,
+  }
+}
+```
+`401 Unauthorized` Invalid credentials.
+
+---
+
+#### DELETE `/profile`
+
+Delete a user's account.
+
+**Response**
+
+`200 OK`:
+
+```javascript
+{
+  "message": "User sucessfully deleted.",
+  "result": {
+    "n": 1,
+    "ok": 1
+  }
+}
+```
+`401 Unauthorized` Invalid credentials.
+
+---
+
 #### GET `/logout`
 
 Log out a user.
