@@ -83,14 +83,17 @@ No parameters
 
 `200 OK` Valid credentials:
 
-| parameter   | type     |
-| :---:       | :---:    |
-| `email`     | _string_ |
-| `username`  | _string_ |
-| `firstName` | _string_ |
-| `lastName`  | _string_ |
-| `avatarUrl` | _string_ |
-
+```javascript
+{
+  "user": {
+    email: _string_,
+    username: _string_,
+    firstName: _string_,
+    lastName: _string_,
+    avatarUrl: _string_
+  }
+}
+```
 `401 Unauthorized` You must be logged in to view this content.
 
 ---
