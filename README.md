@@ -100,7 +100,7 @@ No parameters
 
 #### PUT `/profile`
 
-Register a new user.
+Update a user's profile.
 
 **Request**
 ```javascript
