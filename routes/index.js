@@ -59,23 +59,20 @@ router.post("/register", (req, res, next) => {
 
     // insert document into Mongo
     User.create(userData, (error, user) => {
-      if (error) {
-        return next(error);
-      } else {
-        req.session.userId = user._id;
-        return res.json({
-          "message": "User sucessfully created.",
-          "user": {
-            id: user._id,
-            email: user.email,
-            username: user.username,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            avatarUrl: user.avatarUrl,
-            createdAt: user.createdAt
-          }
-        });
-      }
+      if (error) return next(error);
+      req.session.userId = user._id;
+      return res.json({
+        "message": "User sucessfully created.",
+        "user": {
+          id: user._id,
+          email: user.email,
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          avatarUrl: user.avatarUrl,
+          createdAt: user.createdAt
+        }
+      });
     });
   } else {
     let error = new Error("Missing required fields");
@@ -127,11 +124,10 @@ router.get("/logout", (req, res, next) => {
   if (req.session) {
     // delete session object
     req.session.destroy((err) => {
-      if (err)
-        return next(err);
-        return res.json({
-          "message": "Logout successful.",
-        });
+      if (err) return next(err);
+      return res.json({
+        "message": "Logout successful.",
+      });
     });
   }
 });
