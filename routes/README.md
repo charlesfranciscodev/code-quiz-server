@@ -3,18 +3,20 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [User Routes](#user-routes)
-      - [POST login](#post-login)
-      - [POST register](#post-register)
-      - [GET profile](#get-profile)
-      - [PUT profile](#put-profile)
-      - [DELETE profile](#delete-profile)
-      - [GET logout](#get-logout)
+  - [POST login](#post-login)
+  - [POST register](#post-register)
+  - [GET profile](#get-profile)
+  - [PUT profile](#put-profile)
+  - [DELETE profile](#delete-profile)
+  - [GET logout](#get-logout)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # User Routes
 
-#### POST login
+## POST login
+
+`POST /login`
 
 Validate a user's credentials.
 
@@ -44,7 +46,9 @@ Validate a user's credentials.
 
 ---
 
-#### POST register
+## POST register
+
+`POST /register`
 
 Register a new user.
 
@@ -81,7 +85,9 @@ Register a new user.
 
 ---
 
-#### GET profile
+## GET profile
+
+`GET /profile`
 
 View a user's profile.
 
@@ -108,7 +114,9 @@ No parameters
 
 ---
 
-#### PUT profile
+## PUT profile
+
+`PUT /profile`
 
 Update a user's profile.
 
@@ -144,7 +152,9 @@ Update a user's profile.
 
 ---
 
-#### DELETE profile
+## DELETE profile
+
+`DELETE /profile`
 
 Delete a user's account.
 
@@ -165,7 +175,9 @@ Delete a user's account.
 
 ---
 
-#### GET logout
+## GET logout
+
+`GET /logout`
 
 Log out a user.
 
