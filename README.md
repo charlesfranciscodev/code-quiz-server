@@ -2,7 +2,7 @@
 
 <img src="/images/node-js.png" height="100" width="125">
 
-[User Routes](routes/USER_ROUTES.md)
+[User Routes](routes/README.md)
 
 ## TODO
 * forget password
