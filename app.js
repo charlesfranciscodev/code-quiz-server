@@ -16,6 +16,7 @@ let dbOptions = {
 };
 
 // mongodb connection
+mongoose.Promise = global.Promise;
 mongoose.connect(config.dbHost, dbOptions);
 let db = mongoose.connection;
 // mongo error

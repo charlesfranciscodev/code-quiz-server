@@ -4,6 +4,7 @@ process.env.NODE_ENV = "test";
 const User = require("../models/user");
 const chai = require("chai");
 const should = chai.should();
+const expect = chai.expect;
 const chaiHttp = require("chai-http");
 const app = require("../app");
 
@@ -12,18 +13,21 @@ chai.use(chaiHttp);
 describe("Users", () => {
   before((done) => {
     // empty the database
-    User.remove({}, (err) => {
+    const remove = User.remove({});
+    const user = new User({
+      "email": "charlantfr@gmail.com",
+      "password": "Soshag29",
+      "username": "charlesfranciscodev",
+      "firstName": "Charles",
+      "lastName": "Francisco",
+      "avatarUrl": "http://placeimg.com/400/400/any"
+    });
+    remove.exec().then(() => {
       // create a test user
-      User.create({
-        "email": "charlantfr@gmail.com",
-        "password": "Soshag29",
-        "username": "charlesfranciscodev",
-        "firstName": "Charles",
-        "lastName": "Francisco",
-        "avatarUrl": "http://placeimg.com/400/400/any"
-      }, (error, user) => {
-        done();
-      });
+      return user.save();
+    })
+    .then(() => {
+      done();
     });
   });
 
@@ -39,6 +43,7 @@ describe("Users", () => {
         })
         .end((err, res) => {
           res.should.have.status(200);
+          expect(res).to.have.cookie("connect.sid");
           res.body.should.be.a("object");
           res.body.should.have.property("message").eql("Login successful.");
           res.body.should.have.property("user");
