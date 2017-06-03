@@ -1,6 +1,18 @@
-# User Routes
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-[Home](../README.md)
+- [User Routes](#user-routes)
+      - [POST `/login`](#post-login)
+      - [POST `/register`](#post-register)
+      - [GET `/profile`](#get-profile)
+      - [PUT `/profile`](#put-profile)
+      - [DELETE `/profile`](#delete-profile)
+      - [GET `/logout`](#get-logout)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# User Routes
 
 #### POST `/login`
 
