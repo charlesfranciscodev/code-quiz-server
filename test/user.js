@@ -206,4 +206,35 @@ describe("Users", () => {
         });
     });
   });
+
+  // GET /logout
+  describe("GET /logout", () => {
+    it("should log out the user", (done) => {
+      // login the user
+      const agent = chai.request.agent(app);
+      agent
+        .post("/login")
+        .send({
+          "email": "charlantfr@gmail.com",
+          "password": "Soshag29",
+        })
+        .then((res) => {
+          res.should.have.status(200);
+          expect(res).to.have.cookie("connect.sid");
+
+          // delete the user's account
+          return agent.get("/logout")
+          .then((res) => {
+            res.should.have.status(200);
+            expect(res).to.not.have.cookie("connect.sid");
+            res.body.should.be.a("object");
+            res.body.should.have.property("message").eql("Logout successful.");
+            done();
+          });
+        })
+        .catch(function (err) {
+          throw err;
+        });
+    });
+  });
 });
