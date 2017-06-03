@@ -88,4 +88,40 @@ describe("Users", () => {
         });
     });
   });
+
+  // GET /profile
+  describe("GET /profile", () => {
+    it("should get the user's profile info", (done) => {
+      // login the user
+      const agent = chai.request.agent(app);
+      agent
+        .post("/login")
+        .send({
+          "email": "charlantfr@gmail.com",
+          "password": "Soshag29",
+        })
+        .then((res) => {
+          res.should.have.status(200);
+          expect(res).to.have.cookie("connect.sid");
+
+          // get the user's profile info
+          return agent.get("/profile")
+              .then((res) => {
+              res.should.have.status(200);
+              res.body.should.be.a("object");
+              res.body.should.have.property("user");
+              const user = res.body.user;
+              user.should.have.property("email");
+              user.should.have.property("username");
+              user.should.have.property("firstName");
+              user.should.have.property("lastName");
+              user.should.have.property("avatarUrl");
+              done();
+            });
+        })
+        .catch(function (err) {
+          throw err;
+        });
+    });
+  });
 });
