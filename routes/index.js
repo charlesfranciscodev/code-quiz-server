@@ -62,7 +62,7 @@ router.post("/register", (req, res, next) => {
       if (error) return next(error);
       req.session.userId = user._id;
       return res.json({
-        "message": "User sucessfully created.",
+        "message": "User successfully created.",
         "user": {
           id: user._id,
           email: user.email,
