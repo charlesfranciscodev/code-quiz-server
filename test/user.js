@@ -11,7 +11,7 @@ const app = require("../app");
 chai.use(chaiHttp);
 
 describe("Users", () => {
-  before((done) => {
+  beforeEach((done) => {
     // empty the database
     const remove = User.remove({});
     const user = new User({
@@ -164,6 +164,40 @@ describe("Users", () => {
             res.body.should.have.property("user");
             const userRes = res.body.user;
             expect(userRes).to.eql(user);
+            done();
+          });
+        })
+        .catch(function (err) {
+          throw err;
+        });
+    });
+  });
+
+  // DELETE /profile
+  describe("DELETE /profile", () => {
+    it("should delete the user's account", (done) => {
+      // login the user
+      const agent = chai.request.agent(app);
+      agent
+        .post("/login")
+        .send({
+          "email": "charlantfr@gmail.com",
+          "password": "Soshag29",
+        })
+        .then((res) => {
+          res.should.have.status(200);
+          expect(res).to.have.cookie("connect.sid");
+
+          // delete the user's account
+          return agent.delete("/profile")
+          .then((res) => {
+            res.should.have.status(200);
+            res.body.should.be.a("object");
+            res.body.should.have.property("message").eql("User sucessfully deleted.");
+            res.body.should.have.property("result");
+            const result = res.body.result;
+            result.should.have.property("n").eql(1);
+            result.should.have.property("ok").eql(1);
             done();
           });
         })
