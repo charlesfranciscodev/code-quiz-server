@@ -1,6 +1,5 @@
 process.env.NODE_ENV = "test";
 
-//const mongoose = require("mongoose");
 const User = require("../models/user");
 const chai = require("chai");
 const should = chai.should();
@@ -59,34 +58,52 @@ describe("Users", () => {
     });
   });
 
-  function loginWithMissingFieldsExpect(res) {
+  function unauthorizedLoginExpect(res) {
     res.should.have.status(401);
     expect(res).to.not.have.cookie("connect.sid");
     res.body.should.be.a("object");
-    res.body.should.have.property("message").eql("Email and password are required.");
   }
 
-  describe("POST /login missing email", () => {
+  describe("POST /login with missing email", () => {
     it("should not log in the user", (done) => {
       // login the user
       chai.request(app)
         .post("/login")
         .send({"password": "Soshag29"})
         .end((err, res) => {
-          loginWithMissingFieldsExpect(res);
+          unauthorizedLoginExpect(res);
+          res.body.should.have.property("message").eql("Email and password are required.");
           done();
         });
     });
   });
 
-  describe("POST /login missing password", () => {
+  describe("POST /login with missing password", () => {
     it("should not log in the user", (done) => {
       // login the user
       chai.request(app)
         .post("/login")
         .send({"email": "charlantfr@gmail.com"})
         .end((err, res) => {
-          loginWithMissingFieldsExpect(res);
+          unauthorizedLoginExpect(res);
+          res.body.should.have.property("message").eql("Email and password are required.");
+          done();
+        });
+    });
+  });
+
+  describe("POST /login with invalid email", () => {
+    it("should not log in the user", (done) => {
+      // login the user
+      chai.request(app)
+        .post("/login")
+        .send({
+          "email": "invalid@gmail.com",
+          "password": "Soshag29",
+        })
+        .end((err, res) => {
+          unauthorizedLoginExpect(res);
+          res.body.should.have.property("message").eql("Wrong email or password.");
           done();
         });
     });

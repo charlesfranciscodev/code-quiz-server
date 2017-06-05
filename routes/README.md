@@ -44,7 +44,7 @@ Validate a user's credentials.
 
 `401 Unauthorized` Invalid credentials:
 * `Email and password are required`
-
+* `Wrong email or password.`
 ---
 
 ## POST register
