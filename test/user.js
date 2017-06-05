@@ -31,8 +31,19 @@ describe("Users", () => {
     });
   });
 
+  function loginValidExpect(res) {
+    res.should.have.status(200);
+    expect(res).to.have.cookie("connect.sid");
+    res.body.should.be.a("object");
+    res.body.should.have.property("user");
+    const user = res.body.user;
+    user.should.have.property("id");
+    user.should.have.property("email");
+    user.should.have.property("username");
+  }
+
   describe("POST /login valid", () => {
-    it("should log the user", (done) => {
+    it("should log in the user", (done) => {
       // login the user
       chai.request(app)
         .post("/login")
@@ -41,31 +52,41 @@ describe("Users", () => {
           "password": "Soshag29",
         })
         .end((err, res) => {
-          res.should.have.status(200);
-          expect(res).to.have.cookie("connect.sid");
-          res.body.should.be.a("object");
           res.body.should.have.property("message").eql("Login successful.");
-          res.body.should.have.property("user");
-          const user = res.body.user;
-          user.should.have.property("id");
-          user.should.have.property("email");
-          user.should.have.property("username");
+          loginValidExpect(res);
           done();
         });
     });
   });
 
+  function loginWithMissingFieldsExpect(res) {
+    res.should.have.status(401);
+    expect(res).to.not.have.cookie("connect.sid");
+    res.body.should.be.a("object");
+    res.body.should.have.property("message").eql("Email and password are required.");
+  }
+
   describe("POST /login missing email", () => {
-    it("should not log the user", (done) => {
+    it("should not log in the user", (done) => {
       // login the user
       chai.request(app)
         .post("/login")
         .send({"password": "Soshag29"})
         .end((err, res) => {
-          res.should.have.status(401);
-          expect(res).to.not.have.cookie("connect.sid");
-          res.body.should.be.a("object");
-          res.body.should.have.property("message").eql("Email and password are required.");
+          loginWithMissingFieldsExpect(res);
+          done();
+        });
+    });
+  });
+
+  describe("POST /login missing password", () => {
+    it("should not log in the user", (done) => {
+      // login the user
+      chai.request(app)
+        .post("/login")
+        .send({"email": "charlantfr@gmail.com"})
+        .end((err, res) => {
+          loginWithMissingFieldsExpect(res);
           done();
         });
     });
@@ -86,15 +107,9 @@ describe("Users", () => {
           "avatarUrl": "http://placeimg.com/500/500/any"
         })
         .end((err, res) => {
-          res.should.have.status(200);
-          expect(res).to.have.cookie("connect.sid");
-          res.body.should.be.a("object");
+          loginValidExpect(res);
           res.body.should.have.property("message").eql("User successfully created.");
-          res.body.should.have.property("user");
           const user = res.body.user;
-          user.should.have.property("id");
-          user.should.have.property("email");
-          user.should.have.property("username");
           user.should.have.property("firstName");
           user.should.have.property("lastName");
           user.should.have.property("avatarUrl");
