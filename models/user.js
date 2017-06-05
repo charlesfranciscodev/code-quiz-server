@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const sanitize = require("mongo-sanitize");
+
 const UserSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -41,6 +43,7 @@ const UserSchema = new mongoose.Schema({
 
 // authenticate input against database documents
 UserSchema.statics.authenticate = function(email, password, callback) {
+  email = sanitize(email);
   User.findOne({ email: email }).exec(function (err, user) {
     if (err) {
       return callback(err);

@@ -14,7 +14,7 @@ function userResponse(user) {
 }
 
 // POST /login
-router.post("/login", (req, res, next) => {
+router.post("/login", (req, res) => {
   if (req.body.email && req.body.password) {
     User.authenticate(req.body.email, req.body.password, (error, user) => {
       if (error || !user) {

@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+
 process.env.NODE_ENV = "test";
 
 const User = require("../models/user");
@@ -51,8 +53,8 @@ describe("Users", () => {
           "password": "Soshag29",
         })
         .end((err, res) => {
-          res.body.should.have.property("message").eql("Login successful.");
           loginValidExpect(res);
+          res.body.should.have.property("message").eql("Login successful.");
           done();
         });
     });
@@ -117,6 +119,23 @@ describe("Users", () => {
         .send({
           "email": "charlantfr@gmail.com",
           "password": "invalid",
+        })
+        .end((err, res) => {
+          unauthorizedLoginExpect(res);
+          res.body.should.have.property("message").eql("Wrong email or password.");
+          done();
+        });
+    });
+  });
+
+  describe("POST /login injection", () => {
+    it("should not log in the user", (done) => {
+      // login the user
+      chai.request(app)
+        .post("/login")
+        .send({
+          "email": {"$gt":""},
+          "password": "Soshag29",
         })
         .end((err, res) => {
           unauthorizedLoginExpect(res);
