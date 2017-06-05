@@ -55,7 +55,9 @@ app.use(function(req, res, next) {
 // define as the last app.use callback
 app.use(function(err, req, res) {
   res.status(err.status || 500);
-  return res.send(err.message);
+  return res.json({
+    "message": err.message
+  });
 });
 
 // listen on port

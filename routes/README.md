@@ -42,7 +42,8 @@ Validate a user's credentials.
 }
 ```
 
-`401 Unauthorized` Invalid credentials.
+`401 Unauthorized` Invalid credentials:
+* `Email and password are required`
 
 ---
 
@@ -110,7 +111,7 @@ No parameters
   }
 }
 ```
-`401 Unauthorized` You must be logged in to view this content.
+`401 Unauthorized` You must be logged in to access this content.
 
 ---
 

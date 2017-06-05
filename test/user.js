@@ -31,8 +31,7 @@ describe("Users", () => {
     });
   });
 
-  // POST /login test
-  describe("POST /login", () => {
+  describe("POST /login valid", () => {
     it("should log the user", (done) => {
       // login the user
       chai.request(app)
@@ -51,6 +50,22 @@ describe("Users", () => {
           user.should.have.property("id");
           user.should.have.property("email");
           user.should.have.property("username");
+          done();
+        });
+    });
+  });
+
+  describe("POST /login missing email", () => {
+    it("should not log the user", (done) => {
+      // login the user
+      chai.request(app)
+        .post("/login")
+        .send({"password": "Soshag29"})
+        .end((err, res) => {
+          res.should.have.status(401);
+          expect(res).to.not.have.cookie("connect.sid");
+          res.body.should.be.a("object");
+          res.body.should.have.property("message").eql("Email and password are required.");
           done();
         });
     });
@@ -146,7 +161,7 @@ describe("Users", () => {
             "firstName": "Charles2",
             "lastName": "Francisco2",
             "avatarUrl": "http://placeimg.com/450/450/any"
-          }
+          };
 
           // update the user's profile info
           return agent.put("/profile")
