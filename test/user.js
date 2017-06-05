@@ -109,6 +109,23 @@ describe("Users", () => {
     });
   });
 
+  describe("POST /login with invalid password", () => {
+    it("should not log in the user", (done) => {
+      // login the user
+      chai.request(app)
+        .post("/login")
+        .send({
+          "email": "charlantfr@gmail.com",
+          "password": "invalid",
+        })
+        .end((err, res) => {
+          unauthorizedLoginExpect(res);
+          res.body.should.have.property("message").eql("Wrong email or password.");
+          done();
+        });
+    });
+  });
+
   // POST /register test
   describe("POST /register", () => {
     it("should create a new user", (done) => {
