@@ -197,21 +197,34 @@ describe("Users", () => {
     res.body.should.be.a("object");
   }
 
-  describe("POST /register with missing email", () => {
+  function postRegisterMissingFields(data) {
     it("should not create a new user", (done) => {
       // register the user
       chai.request(app)
         .post("/register")
-        .send({
-          "password": "Bomtyj77",
-          "username": "lightning"
-        })
+        .send(data)
         .end((err, res) => {
           unauthorizedRegisterExpect(res);
           res.body.should.have.property("message").eql("Missing required fields.");
           done();
         });
     });
+  }
+
+  describe("POST /register with missing email", () => {
+    const data = {
+      "password": "Bomtyj77",
+      "username": "lightning"
+    };
+    postRegisterMissingFields(data);
+  });
+
+  describe("POST /register with missing password", () => {
+    const data = {
+      "email": "charles2@mail.com",
+      "username": "lightning"
+    };
+    postRegisterMissingFields(data);
   });
 
   // GET /profile
