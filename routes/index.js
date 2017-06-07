@@ -77,9 +77,10 @@ router.post("/register", (req, res, next) => {
       });
     });
   } else {
-    let error = new Error("Missing required fields");
-    error.status = 400;
-    return next(error);
+    res.status(400);
+    return res.json({
+      "message": "Missing required fields."
+    });
   }
 });
 

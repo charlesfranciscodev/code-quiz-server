@@ -191,6 +191,29 @@ describe("Users", () => {
     });
   });
 
+  function unauthorizedRegisterExpect(res) {
+    res.should.have.status(400);
+    expect(res).to.not.have.cookie("connect.sid");
+    res.body.should.be.a("object");
+  }
+
+  describe("POST /register with missing email", () => {
+    it("should not create a new user", (done) => {
+      // register the user
+      chai.request(app)
+        .post("/register")
+        .send({
+          "password": "Bomtyj77",
+          "username": "lightning"
+        })
+        .end((err, res) => {
+          unauthorizedRegisterExpect(res);
+          res.body.should.have.property("message").eql("Missing required fields.");
+          done();
+        });
+    });
+  });
+
   // GET /profile
   describe("GET /profile", () => {
     it("should get the user's profile info", (done) => {
