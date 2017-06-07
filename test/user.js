@@ -191,12 +191,6 @@ describe("Users", () => {
     });
   });
 
-  function unauthorizedRegisterExpect(res) {
-    res.should.have.status(400);
-    expect(res).to.not.have.cookie("connect.sid");
-    res.body.should.be.a("object");
-  }
-
   function postRegisterMissingFields(data) {
     it("should not create a new user", (done) => {
       // register the user
@@ -204,7 +198,9 @@ describe("Users", () => {
         .post("/register")
         .send(data)
         .end((err, res) => {
-          unauthorizedRegisterExpect(res);
+          res.should.have.status(400);
+          expect(res).to.not.have.cookie("connect.sid");
+          res.body.should.be.a("object");
           res.body.should.have.property("message").eql("Missing required fields.");
           done();
         });
@@ -223,6 +219,14 @@ describe("Users", () => {
     const data = {
       "email": "charles2@mail.com",
       "username": "lightning"
+    };
+    postRegisterMissingFields(data);
+  });
+
+  describe("POST /register with missing username", () => {
+    const data = {
+      "email": "charles2@mail.com",
+      "password": "Bomtyj77"
     };
     postRegisterMissingFields(data);
   });
