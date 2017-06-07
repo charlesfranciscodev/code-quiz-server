@@ -145,8 +145,7 @@ describe("Users", () => {
     });
   });
 
-  // POST /register test
-  describe("POST /register", () => {
+  describe("POST /register with all fields", () => {
     it("should create a new user", (done) => {
       // register the user
       chai.request(app)
@@ -166,6 +165,26 @@ describe("Users", () => {
           user.should.have.property("firstName");
           user.should.have.property("lastName");
           user.should.have.property("avatarUrl");
+          user.should.have.property("createdAt");
+          done();
+        });
+    });
+  });
+
+  describe("POST /register with required fields only", () => {
+    it("should create a new user", (done) => {
+      // register the user
+      chai.request(app)
+        .post("/register")
+        .send({
+          "email": "charles@mail.com",
+          "password": "Mugnoh30",
+          "username": "ice"
+        })
+        .end((err, res) => {
+          loginValidExpect(res);
+          res.body.should.have.property("message").eql("User successfully created.");
+          const user = res.body.user;
           user.should.have.property("createdAt");
           done();
         });
