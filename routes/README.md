@@ -83,6 +83,7 @@ Register a new user.
 }
 ```
 `400 Bad Request` Missing required fields.
+`400 Bad Request` Email already in use.
 
 ---
 

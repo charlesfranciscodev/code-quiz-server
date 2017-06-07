@@ -66,6 +66,7 @@ describe("Users", () => {
     res.body.should.be.a("object");
   }
 
+  // TODO refactor to a function
   describe("POST /login with missing email", () => {
     it("should not log in the user", (done) => {
       // login the user
@@ -80,6 +81,7 @@ describe("Users", () => {
     });
   });
 
+  // TODO refactor to a function
   describe("POST /login with missing password", () => {
     it("should not log in the user", (done) => {
       // login the user
@@ -229,6 +231,26 @@ describe("Users", () => {
       "password": "Bomtyj77"
     };
     postRegisterMissingFields(data);
+  });
+
+  describe("POST /register with existing email", () => {
+    it("should not create a new user", (done) => {
+      // register the user
+      chai.request(app)
+        .post("/register")
+        .send({
+          "email": "charlantfr@gmail.com",
+          "password": "Wilzug26",
+          "username": "bolt"
+        })
+        .end((err, res) => {
+          res.should.have.status(409);
+          expect(res).to.not.have.cookie("connect.sid");
+          res.body.should.be.a("object");
+          res.body.should.have.property("message").eql("Email already in use.");
+          done();
+        });
+    });
   });
 
   // GET /profile

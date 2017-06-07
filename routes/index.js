@@ -61,7 +61,18 @@ router.post("/register", (req, res, next) => {
 
     // insert document into Mongo
     User.create(userData, (error, user) => {
-      if (error) return next(error);
+      if (error) {
+        if (error.code === 11000) {
+          let message = "duplicate key error";
+          if (error.errmsg.includes("email")) {
+            message = "Email already in use.";
+          }
+          res.status(409);
+          return res.json({
+            "message": message
+          });
+        }
+      }
       req.session.userId = user._id;
       return res.json({
         "message": "User successfully created.",
