@@ -193,45 +193,30 @@ describe("Users", () => {
     });
   });
 
-  function postRegisterMissingFields(data) {
+  function postRegister(data, status, message) {
     it("should not create a new user", (done) => {
       // register the user
       chai.request(app)
         .post("/register")
         .send(data)
         .end((err, res) => {
-          res.should.have.status(400);
+          res.should.have.status(status);
           expect(res).to.not.have.cookie("connect.sid");
           res.body.should.be.a("object");
-          res.body.should.have.property("message").eql("Missing required fields.");
+          res.body.should.have.property("message").eql(message);
           done();
         });
     });
   }
 
-  describe("POST /register with missing email", () => {
-    const data = {
-      "password": "Bomtyj77",
-      "username": "lightning"
-    };
-    postRegisterMissingFields(data);
-  });
+  const registerMissing = [
+    [{"password": "Bomtyj77", "username": "lightning"}, "POST /register with missing email"],
+    [{"email": "charles2@mail.com", "username": "lightning"}, "POST /register with missing password"],
+    [{"email": "charles2@mail.com","password": "Bomtyj77"}, "POST /register with missing username"]
+  ];
 
-  describe("POST /register with missing password", () => {
-    const data = {
-      "email": "charles2@mail.com",
-      "username": "lightning"
-    };
-    postRegisterMissingFields(data);
-  });
-
-  describe("POST /register with missing username", () => {
-    const data = {
-      "email": "charles2@mail.com",
-      "password": "Bomtyj77"
-    };
-    postRegisterMissingFields(data);
-  });
+  for (const registerItem of registerMissing)
+    describe(registerItem[1], () => postRegister(registerItem[0], 400, "Missing required fields."));
 
   describe("POST /register with existing email", () => {
     it("should not create a new user", (done) => {
