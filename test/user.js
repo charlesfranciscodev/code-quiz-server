@@ -233,7 +233,7 @@ describe("Users", () => {
   });
 
   // GET /profile
-  describe("GET /profile", () => {
+  describe("GET /profile valid", () => {
     it("should get the user's profile info", (done) => {
       // login the user
       const agent = chai.request.agent(app);
@@ -264,6 +264,21 @@ describe("Users", () => {
         })
         .catch(function (err) {
           throw err;
+        });
+    });
+  });
+
+  // GET /profile
+  describe("GET /profile without logging in", () => {
+    it("should not get the user's profile info", (done) => {
+      chai.request(app)
+        .get("/profile")
+        .catch((res) => {
+          res.should.have.status(401);
+          res.response.body.should.be.a("object");
+          res.response.body.should.have.property("message").eql("You must be logged in to access this content.");
+          res.response.body.should.not.have.property("user");
+          done();
         });
     });
   });

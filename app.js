@@ -53,7 +53,7 @@ app.use(function(req, res, next) {
 
 // error handler
 // define as the last app.use callback
-app.use(function(err, req, res) {
+app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   return res.json({
     "message": err.message
