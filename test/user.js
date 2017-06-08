@@ -209,33 +209,27 @@ describe("Users", () => {
     });
   }
 
+  function postRegisterTest(registerArray, status, message) {
+    for (const registerItem of registerArray)
+      describe(registerItem[1], () => postRegister(registerItem[0], status, message));
+  }
+
   const registerMissing = [
     [{"password": "Bomtyj77", "username": "lightning"}, "POST /register with missing email"],
     [{"email": "charles2@mail.com", "username": "lightning"}, "POST /register with missing password"],
     [{"email": "charles2@mail.com","password": "Bomtyj77"}, "POST /register with missing username"]
   ];
 
-  for (const registerItem of registerMissing)
-    describe(registerItem[1], () => postRegister(registerItem[0], 400, "Missing required fields."));
+  postRegisterTest(registerMissing, 400, "Missing required fields.");
 
   describe("POST /register with existing email", () => {
-    it("should not create a new user", (done) => {
-      // register the user
-      chai.request(app)
-        .post("/register")
-        .send({
-          "email": "charlantfr@gmail.com",
-          "password": "Wilzug26",
-          "username": "bolt"
-        })
-        .end((err, res) => {
-          res.should.have.status(409);
-          expect(res).to.not.have.cookie("connect.sid");
-          res.body.should.be.a("object");
-          res.body.should.have.property("message").eql("Email already in use.");
-          done();
-        });
-    });
+    postRegister({"email": "charlantfr@gmail.com", "password": "Wilzug26", "username": "bolt"},
+                 409, "Email already in use.");
+  });
+
+  describe("POST /register with existing username", () => {
+    postRegister({"email": "charlantfr@mail.com", "password": "Wilzug26", "username": "charlesfranciscodev"},
+                 409, "Username already in use.");
   });
 
   // GET /profile

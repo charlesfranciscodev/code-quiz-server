@@ -66,6 +66,8 @@ router.post("/register", (req, res, next) => {
           let message = "duplicate key error";
           if (error.errmsg.includes("email")) {
             message = "Email already in use.";
+          } else if (error.errmsg.includes("username")) {
+            message = "Username already in use.";
           }
           res.status(409);
           return res.json({
