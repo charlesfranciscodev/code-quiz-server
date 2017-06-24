@@ -260,16 +260,20 @@ describe("Users", () => {
     });
   });
 
+  function unauthorizedExpect(res) {
+    res.should.have.status(401);
+    res.response.body.should.be.a("object");
+    res.response.body.should.have.property("message").eql("You must be logged in to access this content.");
+    res.response.body.should.not.have.property("user");
+  }
+
   // GET /profile
   describe("GET /profile without logging in", () => {
     it("should not get the user's profile info", (done) => {
       chai.request(app)
         .get("/profile")
         .catch((res) => {
-          res.should.have.status(401);
-          res.response.body.should.be.a("object");
-          res.response.body.should.have.property("message").eql("You must be logged in to access this content.");
-          res.response.body.should.not.have.property("user");
+          unauthorizedExpect(res);
           done();
         });
     });
@@ -323,6 +327,18 @@ describe("Users", () => {
     });
   });
 
+  // PUT /profile
+  describe("PUT /profile without logging in", () => {
+    it("should not update the user's profile info", (done) => {
+      chai.request(app)
+        .put("/profile")
+        .catch((res) => {
+          unauthorizedExpect(res);
+          done();
+        });
+    });
+  });
+
   // DELETE /profile
   describe("DELETE /profile", () => {
     it("should delete the user's account", (done) => {
@@ -353,6 +369,18 @@ describe("Users", () => {
         })
         .catch(function (err) {
           throw err;
+        });
+    });
+  });
+
+  // DELETE /profile
+  describe("DELETE /profile without logging in", () => {
+    it("should not delete the user's account", (done) => {
+      chai.request(app)
+        .delete("/profile")
+        .catch((res) => {
+          unauthorizedExpect(res);
+          done();
         });
     });
   });
