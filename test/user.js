@@ -66,34 +66,26 @@ describe("Users", () => {
     res.body.should.be.a("object");
   }
 
-  // TODO refactor to a function
-  describe("POST /login with missing email", () => {
+  function postLoginWithMissingFields(data) {
     it("should not log in the user", (done) => {
-      // login the user
+      // register the user
       chai.request(app)
         .post("/login")
-        .send({"password": "Soshag29"})
+        .send(data)
         .end((err, res) => {
           unauthorizedLoginExpect(res);
           res.body.should.have.property("message").eql("Email and password are required.");
           done();
         });
     });
+  }
+
+  describe("POST /login with missing email", () => {
+    postLoginWithMissingFields({"password": "Soshag29"});
   });
 
-  // TODO refactor to a function
   describe("POST /login with missing password", () => {
-    it("should not log in the user", (done) => {
-      // login the user
-      chai.request(app)
-        .post("/login")
-        .send({"email": "charlantfr@gmail.com"})
-        .end((err, res) => {
-          unauthorizedLoginExpect(res);
-          res.body.should.have.property("message").eql("Email and password are required.");
-          done();
-        });
-    });
+    postLoginWithMissingFields({"email": "charlantfr@gmail.com"});
   });
 
   describe("POST /login with invalid email", () => {
@@ -209,7 +201,7 @@ describe("Users", () => {
     });
   }
 
-  function postRegisterTest(registerArray, status, message) {
+  function postRegisterAll(registerArray, status, message) {
     for (const registerItem of registerArray)
       describe(registerItem[1], () => postRegister(registerItem[0], status, message));
   }
@@ -220,7 +212,7 @@ describe("Users", () => {
     [{"email": "charles2@mail.com","password": "Bomtyj77"}, "POST /register with missing username"]
   ];
 
-  postRegisterTest(registerMissing, 400, "Missing required fields.");
+  postRegisterAll(registerMissing, 400, "Missing required fields.");
 
   describe("POST /register with existing email", () => {
     postRegister({"email": "charlantfr@gmail.com", "password": "Wilzug26", "username": "bolt"},
