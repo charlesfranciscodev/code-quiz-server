@@ -151,7 +151,7 @@ Update a user's profile.
   }
 }
 ```
-`401 Unauthorized` Invalid credentials.
+`401 Unauthorized` You must be logged in to access this content.
 
 ---
 
@@ -174,7 +174,7 @@ Delete a user's account.
   }
 }
 ```
-`401 Unauthorized` Invalid credentials.
+`401 Unauthorized` You must be logged in to access this content.
 
 ---
 
